@@ -10,4 +10,4 @@ This project showcases DOM manipulation, media queries, usage of JSON and localS
 - JSON used for storing and retrieving scores.
 
 ## Link
-Have a nice time : 
+Have a nice time : https://cookiedarb.github.io/Rock-Paper-Scissors/
