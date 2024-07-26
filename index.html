@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+
+        body{
+            background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+            display:flex;
+            flex-flow:column nowrap;
+        }
+
+        h1{
+            font-size: 2rem;
+            text-align: center;
+            color:aliceblue;
+            width:fit-content;
+            margin:auto;
+            padding:0.5rem;
+            border:white 1px solid;
+            background: rgb(0, 0, 0,0.1);
+            backdrop-filter: blur(100px);
+            margin-top: 1rem;
+            border-radius: 5px;
+            order:0;
+        }
+
+        .result{
+            order:2;
+        }
+
+        .moves{
+            order:1;
+            column-count: 2;
+            column-rule: solid 2px white;
+            
+        }
+
+        .moves p{
+            text-align: center;
+            color:white;
+            font-size: 1.5rem;
+        }
+
+        .score{
+            order:3;
+        }
+
+        .reset-button{
+            order:4;
+        }
+
+        .moves-button{
+            order:5;
+        }
+        
+        .moves-button button{
+            background-color: transparent;
+            padding:0.75rem;
+            border:white 2px solid;
+            border-radius: 50px;
+            background: rgb(0, 0, 0,0.1);
+            backdrop-filter: blur(100px);
+        }
+    </style>
+</head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+
+    <section class="moves">
+        <img src="" alt="">
+    </section>
+
+    <section class="moves-button">
+        <button onclick="
+            checkWin('Rock',generateRandom());
+            "><img src="img/rock-emoji.png" alt="Rock" title="Rock" height="50" width="50"></button>
+
+        <button onclick="
+            checkWin('Paper',generateRandom());            
+        "><img src="img/paper-emoji.png" alt="Paper" title="Paper" height="50" width="50"></button>
+
+        <button onclick="
+            checkWin('Scissors',generateRandom());
+        "><img src="img/scissors-emoji.png" alt="Scissors" title="Scissors" height="50" width="50"></button>
+
+    </section>
+        
+    <p class="js-result result"></p>
+    <section class="js-moves moves">
+        <section class="col1">
+            <p>You</p>
+            <img src="img/rock-emoji.png" alt="Rock" title="Rock" height="100" width="100">
+        </section>
+        <section class="col2">
+            <p>Computer</p>
+            <img src="img/rock-emoji.png" alt="Rock" title="Rock" height="100" width="100">
+        </section>
+    </section>
+    <p class="js-score score"></p>
+    
+    <section class="reset-button">
+        <button onclick="
+            score.win=0;
+            score.draw=0;
+            score.lose=0;
+            localStorage.removeItem('score');
+            console.log(score);
+            document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+        ">Reset Score</button>
+    </section>
+
+    
+    <script>
+        function draw(playerMove,computerMove){
+            //alert(`It's a tie. You picked ${playerMove} and computer picked ${computerMove}`);
+            score.draw++;
+            document.querySelector('.js-result').innerHTML=`It's a tie`;
+            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+        }
+
+        function win(playerMove,computerMove){
+            //alert(`You won! You picked ${playerMove} and Computer picked ${computerMove}`);
+            score.win++;
+            document.querySelector('.js-result').innerHTML=`You win!`;
+            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+        }
+
+        function lose(playerMove,computerMove){
+            //alert(`You lost! You picked ${playerMove} and Computer picked ${computerMove}`);
+            score.lose++;
+            document.querySelector('.js-result').innerHTML=`You lose!`;
+            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+        }
+
+        function generateRandom(){
+            let randomValue=Math.random()*3;
+            if(randomValue<1){
+                return 'Rock';
+            }
+            else if(randomValue<2){
+                return 'Paper';
+            }
+            else{
+                return 'Scissors';
+            }
+        }
+
+        function checkWin(playerMove,computerMove){
+            if(playerMove=='Rock'){
+                if(computerMove=='Rock'){
+                    draw(playerMove,computerMove);
+                }else if(computerMove=='Scissors'){
+                    win(playerMove,computerMove);
+                }
+                else{
+                    lose(playerMove,computerMove);
+                }
+            }else if(playerMove=='Scissors'){
+                if(computerMove=='Rock'){
+                    lose(playerMove,computerMove);
+                }else if(computerMove=='Scissors'){
+                    draw(playerMove,computerMove);
+                }
+                else{
+                    win(playerMove,computerMove);
+                }    
+            }else{
+                if(computerMove=='Rock'){
+                    win(playerMove,computerMove);
+                }else if(computerMove=='Scissors'){
+                    lose(playerMove,computerMove);
+                }
+                else{
+                    draw(playerMove,computerMove);
+                }
+            }
+            console.log(score);
+            document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+            localStorage.setItem('score',JSON.stringify(score));
+        }
+
+        let score=JSON.parse(localStorage.getItem('score'))||{
+            win:0,
+            draw:0,
+            lose:0
+        };
+
+        document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+    </script>
+</body>
+</html>
