@@ -21,44 +21,80 @@
             font-size: 2rem;
             text-align: center;
             color:aliceblue;
-            width:fit-content;
             margin:auto;
             padding:0.5rem;
-            border:white 1px solid;
-            background: rgb(0, 0, 0,0.1);
-            backdrop-filter: blur(100px);
-            margin-top: 1rem;
-            border-radius: 5px;
+            border-top: white 1px solid;
+            border-bottom: white 1px solid;
+            margin-top: 2rem;
             order:0;
         }
 
         .result{
             order:2;
+            color: white;
+            font-size: 1.25rem;
+            text-align: center;
+            margin-top:2rem;
         }
 
         .moves{
             order:1;
             column-count: 2;
             column-rule: solid 2px white;
-            
+            margin-top: 4rem;
         }
 
-        .moves p{
+        .moves .col1, .col2{
+            display:flex;
+            flex-flow: column nowrap;
+            justify-content: space-evenly;
+        }
+
+        .moves h2{
             text-align: center;
             color:white;
             font-size: 1.5rem;
         }
 
+        .moves img{
+            margin:auto;
+            margin-top: 1rem;
+        }
+
         .score{
             order:3;
+            color: white;
+            text-align: center;
+            font-size: 1.25rem;
+            margin-top: 1rem;
         }
 
         .reset-button{
             order:4;
+            display:flex;
+            flex-flow:column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reset-button button{
+            background-color: rgba(0,0,0,0.1);
+            backdrop-filter: blur(100px);
+            padding:0.5rem;
+            border:white 1.5px solid;
+            color:white;
+            font-size: 1.25rem;
+            width:fit-content;
+            margin-top:2.5rem;
+            border-radius: 5px;
         }
 
         .moves-button{
             order:5;
+            margin-top: 3rem;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-evenly;
         }
         
         .moves-button button{
@@ -74,36 +110,18 @@
 <body>
     <h1>Rock Paper Scissors</h1>
 
-    <section class="moves">
-        <img src="" alt="">
-    </section>
-
-    <section class="moves-button">
-        <button onclick="
-            checkWin('Rock',generateRandom());
-            "><img src="img/rock-emoji.png" alt="Rock" title="Rock" height="50" width="50"></button>
-
-        <button onclick="
-            checkWin('Paper',generateRandom());            
-        "><img src="img/paper-emoji.png" alt="Paper" title="Paper" height="50" width="50"></button>
-
-        <button onclick="
-            checkWin('Scissors',generateRandom());
-        "><img src="img/scissors-emoji.png" alt="Scissors" title="Scissors" height="50" width="50"></button>
-
-    </section>
-        
-    <p class="js-result result"></p>
     <section class="js-moves moves">
         <section class="col1">
-            <p>You</p>
+            <h2>You</h2>
             <img src="img/rock-emoji.png" alt="Rock" title="Rock" height="100" width="100">
         </section>
         <section class="col2">
-            <p>Computer</p>
+            <h2>Computer</h2>
             <img src="img/rock-emoji.png" alt="Rock" title="Rock" height="100" width="100">
         </section>
     </section>
+
+    <p class="js-result result">Welcome!</p>
     <p class="js-score score"></p>
     
     <section class="reset-button">
@@ -113,69 +131,94 @@
             score.lose=0;
             localStorage.removeItem('score');
             console.log(score);
-            document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+            document.querySelector('.js-score').innerHTML=`Wins: ${score.win} | Draws: ${score.draw} | Lost: ${score.lose}`;
         ">Reset Score</button>
+    </section>
+
+    <section class="moves-button">
+        <button onclick="
+            checkWin('rock',generateRandom());
+            "><img src="img/rock-emoji.png" alt="Rock" title="Rock" height="50" width="50"></button>
+
+        <button onclick="
+            checkWin('paper',generateRandom());            
+        "><img src="img/paper-emoji.png" alt="Paper" title="Paper" height="50" width="50"></button>
+
+        <button onclick="
+            checkWin('scissors',generateRandom());
+        "><img src="img/scissors-emoji.png" alt="Scissors" title="Scissors" height="50" width="50"></button>
+
     </section>
 
     
     <script>
+        function displayMove(playerMove,computerMove){
+            document.querySelector('.js-moves').innerHTML=`
+            <section class="col1">
+                <h2>You</h2>
+                <img src="img/${playerMove}-emoji.png" alt="${playerMove}" title="${playerMove}" height="100" width="100">
+            </section>
+
+            <section class="col2">
+                <h2>Computer</h2>
+                <img src="img/${computerMove}-emoji.png" alt="${computerMove}" title="${computerMove}" height="100" width="100">
+            </section>`;
+        }
+
         function draw(playerMove,computerMove){
-            //alert(`It's a tie. You picked ${playerMove} and computer picked ${computerMove}`);
             score.draw++;
-            document.querySelector('.js-result').innerHTML=`It's a tie`;
-            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+            document.querySelector('.js-result').innerHTML=`Tie!`;
+            displayMove(playerMove,computerMove);
         }
 
         function win(playerMove,computerMove){
-            //alert(`You won! You picked ${playerMove} and Computer picked ${computerMove}`);
             score.win++;
             document.querySelector('.js-result').innerHTML=`You win!`;
-            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+            displayMove(playerMove,computerMove);
         }
 
         function lose(playerMove,computerMove){
-            //alert(`You lost! You picked ${playerMove} and Computer picked ${computerMove}`);
             score.lose++;
-            document.querySelector('.js-result').innerHTML=`You lose!`;
-            document.querySelector('.js-moves').innerHTML=`You picked ${playerMove} and Computer picked ${computerMove}`;
+            document.querySelector('.js-result').innerHTML=`You lost!`;
+            displayMove(playerMove,computerMove);
         }
 
         function generateRandom(){
             let randomValue=Math.random()*3;
             if(randomValue<1){
-                return 'Rock';
+                return 'rock';
             }
             else if(randomValue<2){
-                return 'Paper';
+                return 'paper';
             }
             else{
-                return 'Scissors';
+                return 'scissors';
             }
         }
 
         function checkWin(playerMove,computerMove){
-            if(playerMove=='Rock'){
-                if(computerMove=='Rock'){
+            if(playerMove=='rock'){
+                if(computerMove=='rock'){
                     draw(playerMove,computerMove);
-                }else if(computerMove=='Scissors'){
+                }else if(computerMove=='scissors'){
                     win(playerMove,computerMove);
                 }
                 else{
                     lose(playerMove,computerMove);
                 }
-            }else if(playerMove=='Scissors'){
-                if(computerMove=='Rock'){
+            }else if(playerMove=='scissors'){
+                if(computerMove=='rock'){
                     lose(playerMove,computerMove);
-                }else if(computerMove=='Scissors'){
+                }else if(computerMove=='scissors'){
                     draw(playerMove,computerMove);
                 }
                 else{
                     win(playerMove,computerMove);
                 }    
             }else{
-                if(computerMove=='Rock'){
+                if(computerMove=='rock'){
                     win(playerMove,computerMove);
-                }else if(computerMove=='Scissors'){
+                }else if(computerMove=='scissors'){
                     lose(playerMove,computerMove);
                 }
                 else{
@@ -183,7 +226,7 @@
                 }
             }
             console.log(score);
-            document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+            document.querySelector('.js-score').innerHTML=`Wins: ${score.win} | Draws: ${score.draw} | Lost: ${score.lose}`;
             localStorage.setItem('score',JSON.stringify(score));
         }
 
@@ -193,7 +236,7 @@
             lose:0
         };
 
-        document.querySelector('.js-score').innerHTML=`Win: ${score.win}, Draw: ${score.draw}, Lose: ${score.lose}`;
+        document.querySelector('.js-score').innerHTML=`Wins: ${score.win} | Draws: ${score.draw} | Lost: ${score.lose}`;
     </script>
 </body>
 </html>
