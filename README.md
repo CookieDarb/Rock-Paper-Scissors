@@ -11,3 +11,7 @@ This project showcases DOM manipulation, media queries, usage of JSON and localS
 
 ## Link
 Have a nice time : https://cookiedarb.github.io/Rock-Paper-Scissors/
+
+## Screenshot
+![image](https://github.com/user-attachments/assets/b6c6d3b2-c480-43b5-b5b7-5db715a7b0b1)
+
